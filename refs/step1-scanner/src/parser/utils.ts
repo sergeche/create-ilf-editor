@@ -246,10 +246,6 @@ export function isUnicodeAlpha(code: number): boolean {
         || code >= 6480 && code <= 6527; // Tai Le
 }
 
-export function isCommandName(ch: number): boolean {
-    return ch === Codes.Underscore || isNumber(ch) || isUnicodeAlpha(ch);
-}
-
 /**
  * Если указанный код является символом a-z, конвертирует его в верхний регистр
  */
