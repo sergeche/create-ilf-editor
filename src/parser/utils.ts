@@ -99,26 +99,8 @@ const boundPunctuation = new Set<number>([
     Codes.CurlyBracketOpen, Codes.CurlyBracketClose,
 ]);
 
-/** Знаки препинания */
-const punctuation = new Set<number>([
-    Codes.Exclamation, Codes.Comma, Codes.Dot, Codes.Colon, Codes.Question,
-    Codes.Hyphen, Codes.EnDash, Codes.EmDash
-]);
-
-const delimiterPunctuation = new Set<number>([
-    Codes.Exclamation, Codes.Comma, Codes.Dot, Codes.SemiColon, Codes.Question
-]);
-
-export function isPunctuation(ch: number): boolean {
-    return boundPunctuation.has(ch) || punctuation.has(ch);
-}
-
 export function isBoundPunctuation(ch: number): boolean {
     return boundPunctuation.has(ch);
-}
-
-export function isDelimiterPunct(ch: number): boolean {
-    return delimiterPunctuation.has(ch);
 }
 
 export function isWhitespace(ch: number): boolean {
@@ -143,7 +125,6 @@ export function isBound(ch?: number): boolean {
 export function isDelimiter(ch?: number): boolean {
     return isBound(ch)
         || isBoundPunctuation(ch!);
-        // || isMarkdown(ch);
 }
 
 /**
@@ -170,23 +151,8 @@ export function consumeIdentifier(state: ParserState): boolean {
 }
 
 /**
- * Вернёт `true`, если все коды из `arr` были поглощены из текущей позиции потока
- * TODO перенести в ParserState
+ * Вернёт последний элемент указанного массива
  */
-export function consumeArray(state: ParserState, arr: number[], ignoreCase?: boolean): boolean {
-    const { pos } = state;
-    let ch: number;
-    for (let i = 0; i < arr.length; i++) {
-        ch = ignoreCase ? asciiToUpper(state.next()) : state.next();
-        if (arr[i] !== ch) {
-            state.pos = pos;
-            return false;
-        }
-    }
-
-    return true;
-}
-
 export function last<T>(arr: T[]): T | undefined {
     if (arr.length > 0) {
         return arr[arr.length - 1];
@@ -200,7 +166,7 @@ export function last<T>(arr: T[]): T | undefined {
 export function toCode(str: string, ignoreCase?: boolean): number[] {
     const result: number[] = [];
     for (let i = 0; i < str.length; i++) {
-        result.push(ignoreCase ? asciiToUpper(str.charCodeAt(i)) : str.charCodeAt(i));
+        result.push(ignoreCase ? asciiToUpper(str.codePointAt(i)!) : str.codePointAt(i)!);
     }
 
     return result;
@@ -228,23 +194,11 @@ export function isAlphaNumeric(code: number): boolean {
     return isNumber(code) || isAlpha(code);
 }
 
+/**
+ * Вернёт `true` если указанный код соответствует ординарной или двойной кавычке
+ */
 export function isQuote(ch: number): boolean {
     return ch === Codes.SingleQuote || ch === Codes.DoubleQuote;
-}
-
-/**
- * Check if given character code is simple letter of supported alphabets
- */
-export function isMultiAlpha(code: number): boolean {
-    return isAlpha(code) || // a-zA-Z
-        code === 1105 || code === 1025 || // Ёё
-        code >= 1040 && code <= 1103 || // Аа-Яя
-        code >= 1568 && code <= 1599 || // Arabic and Farsi letters
-        code >= 1601 && code <= 1610 || // Arabic letters
-        code === 1662 || code === 1670 || code === 1688 || code === 1703 || code === 1705 || code === 1711 || // arabic letters
-        code >= 1729 && code <= 1731 || // Arabic letters
-        code === 1740 || // Arabic letters
-        code >= 1641 && code <= 1776; // Arabic and Persian numbers
 }
 
 /**
@@ -293,7 +247,7 @@ export function isUnicodeAlpha(code: number): boolean {
 }
 
 export function isCommandName(ch: number): boolean {
-    return ch === Codes.Underscore || isNumber(ch) || isMultiAlpha(ch);
+    return ch === Codes.Underscore || isNumber(ch) || isUnicodeAlpha(ch);
 }
 
 /**

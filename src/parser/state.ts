@@ -1,6 +1,6 @@
 import type { Bracket, Emoji, Token, TokenText } from './types';
 import { TokenFormat, TokenType } from './types';
-import { isDelimiter, last, Codes } from './utils';
+import { isDelimiter, last, Codes, asciiToUpper } from './utils';
 
 type MatchFn = (ch: number) => boolean;
 
@@ -111,6 +111,24 @@ export default class ParserState {
         const start = this.pos;
         while (this.hasNext() && this.consume(match)) { /* */ }
         return this.pos !== start;
+    }
+
+    /**
+     * Вернёт `true`, если все коды из `arr` были поглощены из текущей позиции потока
+     * @param ignoreCase Игнорировать регистр для латинских символов ASCII-последовательности
+     */
+    consumeArray(arr: number[], ignoreCase?: boolean): boolean {
+        const { pos } = this;
+        let ch: number;
+        for (let i = 0; i < arr.length; i++) {
+            ch = ignoreCase ? asciiToUpper(this.next()) : this.next();
+            if (arr[i] !== ch) {
+                this.pos = pos;
+                return false;
+            }
+        }
+
+        return true;
     }
 
     /**

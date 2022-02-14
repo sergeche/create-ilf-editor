@@ -1,5 +1,5 @@
 import type { TextRange } from './types';
-import { createWalker, getRawValue, isElement, isText } from './utils';
+import { getRawValue, isElement, isText } from './utils';
 import { clamp } from '../formatting/utils';
 
 interface RangeBound {
@@ -280,4 +280,8 @@ function isValidLineMarkup(container: HTMLElement): boolean {
     }
 
     return false;
+}
+
+function createWalker(elem: HTMLElement): TreeWalker {
+    return elem.ownerDocument.createTreeWalker(elem, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT)
 }

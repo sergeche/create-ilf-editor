@@ -10,7 +10,7 @@
 
 import ParserState, { getQuoteType } from './state';
 import { consumeTree, createTree } from './tree';
-import { Codes, consumeArray, isAlpha, isNumber, isUnicodeAlpha, isDelimiter, toCode, isBound, isWhitespace, isNewLine, isQuote } from './utils';
+import { Codes, isAlpha, isNumber, isUnicodeAlpha, isDelimiter, toCode, isBound, isWhitespace, isNewLine, isQuote } from './utils';
 import { keycap } from './emoji';
 import { TokenFormat, TokenType } from './types';
 import type { TokenLink, Bracket } from './types';
@@ -120,7 +120,7 @@ export default function parseLink(state: ParserState): boolean {
  */
 function strictEmail(state: ParserState): ConsumeResult {
     const { pos } = state;
-    if (consumeArray(state, mailtoChars, true)) {
+    if (state.consumeArray(mailtoChars, true)) {
         // Если поглотили протокол, то независимо от работы `email()`
         // вернём `true`, тем самым сохраним `mailto:` в качестве обычного текста,
         // если за ним не следует нормальный e-mail.
@@ -202,7 +202,7 @@ function emailOrAddress(state: ParserState): ConsumeResult {
 
 function magnet(state: ParserState): ConsumeResult {
     const { pos } = state;
-    if (consumeArray(state, magnetChars, true)) {
+    if (state.consumeArray(magnetChars, true)) {
         consumeQueryString(state);
         const value = state.substring(pos);
         state.push(linkToken(value, value));

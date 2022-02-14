@@ -1,7 +1,3 @@
-export function createWalker(elem: HTMLElement): TreeWalker {
-    return elem.ownerDocument.createTreeWalker(elem, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT)
-}
-
 export function isText(node: Node): node is Text {
     return node.nodeType === Node.TEXT_NODE;
 }
