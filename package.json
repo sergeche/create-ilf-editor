@@ -1,6 +1,9 @@
 {
   "name": "create-ilf-editor",
   "version": "0.0.0",
+  "bin": {
+    "create-ilf-editor": "create.js"
+  },
   "scripts": {
     "dev": "vite --port 3100",
     "build": "tsc && vite build",
