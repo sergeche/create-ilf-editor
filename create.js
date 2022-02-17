@@ -24,7 +24,7 @@ function init() {
         copy(path.join(src, file), path.join(root, file));
     }
 
-    fs.writeFileSync(path.join(root, ',gitignore'), gitignore)
+    fs.writeFileSync(path.join(root, '.gitignore'), gitignore)
 
     console.log(`\nГотово. Теперь выполните:\n`);
     if (root !== cwd) {
