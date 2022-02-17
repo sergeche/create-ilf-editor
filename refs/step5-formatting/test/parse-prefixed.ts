@@ -16,9 +16,7 @@ test('parse hashtags', () => {
         { type: TokenType.HashTag, format: TokenFormat.None, value: '#foo' },
         { type: TokenType.Text, format: TokenFormat.None, value: ' test ' },
         { type: TokenType.HashTag, format: TokenFormat.None, value: '#1' },
-        { type: TokenType.Text, format: TokenFormat.None, value: ' ' },
-        { type: TokenType.HashTag, format: TokenFormat.None, value: '#' },
-        { type: TokenType.Text, format: TokenFormat.None, value: ' #@bar #!attention' }
+        { type: TokenType.Text, format: TokenFormat.None, value: ' # #@bar #!attention' }
     ]);
 
     // Хэштэги можно писать вместе

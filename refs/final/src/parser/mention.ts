@@ -9,11 +9,10 @@ export default function parseMention(state: ParserState): boolean {
             // Разрешаем поглотить самостоятельный символ `@`, чтобы показывать
             // его в редакторе и при необходимости вывести автокомплит
             if (consumeIdentifier(state) || isDelimiter(state.peek())) {
-                const value = state.substring(pos);
                 state.push({
                     type: TokenType.Mention,
                     format: TokenFormat.None,
-                    value,
+                    value: state.substring(pos),
                 });
                 return true;
             }

@@ -2,7 +2,7 @@ import { test } from 'uvu';
 import { equal } from 'uvu/assert';
 import parse, { TokenType, TokenFormat } from '../src/parser';
 import type { TokenText, TokenLink, Emoji } from '../src/parser';
-import { TokenNewline } from '../src/parser/types';
+import type { TokenNewline } from '../src/parser/types';
 
 function text(value: string, emoji?: Emoji[]): TokenText {
     const token: TokenText = {
@@ -156,7 +156,8 @@ test('parse e-mail', () => {
         // '"john..doe"@example.org',
         'mailhost!username@example.org',
         'user%example.com@example.org',
-        'user-@example.org'
+        'user-@example.org',
+        'ok.ru@mail.ru'
     ];
 
     for (const email of emails) {
@@ -195,7 +196,6 @@ test('parse url', () => {
         'https://mobile.jira.com/browse/HGD-10584',
         'https://incrussia.ru/news/fake-zoom/',
         'group_calls2.messenger.ok.ru.msk',
-        'https://zen.yandex.ru/media/id/5ce506fd81f64200b4db5a94/navalnyi-snial-s-bitkoinkoshelka-dlia-pojertvovanii-bolee-800-tys-rublei-na-semeinyi-otdyh-v-tailande-5e1d4fc4dddaf400b1f70a9e',
         'http://s9500ebtc04.sk.roskazna.local/viewLog.html?buildTypeId=id12skiao_LibCades&buildId=130',
         'https://some.build-server.ru/viewType.html?buildTypeId=NewWeb_MainSh_Messenger&branch_NewWeb_MainSh=%3Cdefault%3E',
         '//m.ok.ru',
@@ -243,7 +243,9 @@ test('parse url', () => {
     ]);
 });
 
-test('handle invalid url', () => {
+test.only('handle invalid url', () => {
+    console.log(parse('ok.ru:3002️⃣'));
+
     equal(parse('/var/tmp/foo_bar.cf'), [
         text('/var/tmp/foo_bar.cf'),
     ]);
